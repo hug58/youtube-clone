@@ -45,8 +45,11 @@ A modern YouTube clone built with Django, featuring video upload, playback, user
 
 3. **Using Docker (Recommended)**
    ```bash
-   docker compose up 
+   docker compose up        # Run in foreground
+   docker compose up -d     # Run in background
    ```
+
+   
 
 4. **Local Development**
    ```bash
