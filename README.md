@@ -19,7 +19,7 @@ A modern YouTube clone built with Django, featuring video upload, playback, user
 - **Reverse Proxy**: Nginx
 - **Containerization**: Docker & Docker Compose
 - **Authentication**: Django's built-in authentication system
-- **Video Processing**: Google API Client
+- **YouTube Integration**: Google API Client for random video imports
 
 ## 📋 Prerequisites
 
@@ -30,11 +30,6 @@ A modern YouTube clone built with Django, featuring video upload, playback, user
 
 ## 🚀 Getting Started
 
-1. **Clone the repository**
-   ```bash
-   git clone [your-repository-url]
-   cd youtube-clone
-   ```
 
 2. **Set up environment variables**
    Create a `.env` file in the root directory with the following variables:
