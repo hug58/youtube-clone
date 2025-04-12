@@ -11,7 +11,6 @@ services:
       && gunicorn youtube_clone.wsgi:application --config gunicorn.py"
     environment:
       - DOCKER_TIMEZONE=America/Caracas
-      - TOKEN_API_HUGGING=${TOKEN_API_HUGGING}
       - SECRET_KEY=${SECRET_KEY}
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password

@@ -25,7 +25,7 @@ A modern YouTube clone built with Django, featuring video upload, playback, user
 
 ## 📋 Prerequisites
 
-- Python 3.8+
+- Python 3.12.6+
 - Docker and Docker Compose
 - Git
 - YouTube Data API Key (for video import feature)
@@ -43,7 +43,6 @@ A modern YouTube clone built with Django, featuring video upload, playback, user
    ```
    SECRET_KEY=your-secret-key
    DEBUG=True
-   YOUTUBE_API_KEY=your-youtube-api-key
    ```
 
 3. **Using Docker (Recommended)**
