@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load content_extras %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="ratio ratio-16x9">
+                    {{ video.embed_url|safe }}
+                </div>
+                <div class="card-body">
+                    <h1 class="card-title">{{ video.title }}</h1>
+                    <p class="text-muted">
+                        Uploaded by {{ video.uploader.username }} on {{ video.created_at|date:"d/m/Y" }}
+                    </p>
+                    
+                    <!-- Likes and Dislikes Bar -->
+                    <div class="mt-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <button class="btn btn-outline-primary me-2" onclick="handleAction('like')">
+                                <i class="bi bi-hand-thumbs-up"></i> <span id="likes-count">{{ video.likes.count }}</span>
+                            </button>
+                            <button class="btn btn-outline-danger" onclick="handleAction('dislike')">
+                                <i class="bi bi-hand-thumbs-down"></i> <span id="dislikes-count">{{ video.dislikes.count }}</span>
+                            </button>
+                        </div>
+                        <div class="progress" style="height: 5px;">
+                            <div id="likes-bar" class="progress-bar bg-primary" role="progressbar" 
+                                 style="width: {{ video.get_likes_percentage }}%; transition: width 0.3s ease-in-out;">
+                            </div>
+                            <div id="dislikes-bar" class="progress-bar bg-danger" role="progressbar" 
+                                 style="width: {{ 100|subtract:video.get_likes_percentage }}%; transition: width 0.3s ease-in-out;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="mt-5">
+                        <h3>Comments</h3>
+                        {% if user.is_authenticated %}
+                            <form method="post" class="mb-4">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <textarea name="comment" class="form-control" rows="3" 
+                                              placeholder="Add a comment..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Comment</button>
+                            </form>
+                        {% else %}
+                            <p class="text-muted">Please <a href="{% url 'login' %}">login</a> to comment.</p>
+                        {% endif %}
+
+                        <div class="comments-list">
+                            {% for comment in comments %}
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="card-subtitle mb-2 text-muted">
+                                                {{ comment.user.username }}
+                                            </h6>
+                                            <small class="text-muted">
+                                                {{ comment.created_at|date:"d/m/Y H:i" }}
+                                            </small>
+                                        </div>
+                                        <p class="card-text">{{ comment.content }}</p>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <p class="text-muted">No comments yet.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function handleAction(action) {
+    fetch(window.location.href, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: `action=${action}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('likes-count').textContent = data.likes_count;
+        document.getElementById('dislikes-count').textContent = data.dislikes_count;
+        
+        // Update progress bar
+        const total = data.likes_count + data.dislikes_count;
+        const likesBar = document.getElementById('likes-bar');
+        const dislikesBar = document.getElementById('dislikes-bar');
+        
+        if (total === 0) {
+            // If there are no likes or dislikes, show both bars in gray
+            likesBar.style.width = '50%';
+            likesBar.className = 'progress-bar bg-secondary';
+            dislikesBar.style.width = '50%';
+            dislikesBar.className = 'progress-bar bg-secondary';
+        } else {
+            // If there are likes or dislikes, show normal bars
+            const likesPercentage = (data.likes_count / total) * 100;
+            likesBar.style.width = `${likesPercentage}%`;
+            likesBar.className = 'progress-bar bg-primary';
+            dislikesBar.style.width = `${100 - likesPercentage}%`;
+            dislikesBar.className = 'progress-bar bg-danger';
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+{% endblock %} 

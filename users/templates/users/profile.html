@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">
+                    <i class="bi bi-person-circle"></i> Profile
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h4>{{ user.username }}</h4>
+                    <p class="text-muted">{{ user.email }}</p>
+                </div>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'content:create_video' %}" class="btn btn-primary">
+                        <i class="bi bi-camera-video"></i> Upload Video
+                    </a>
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Comments -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5>Last 5 Comments</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_comments %}
+                    <ul class="list-group">
+                        {% for comment in recent_comments %}
+                            <li class="list-group-item">
+                                <p><strong>Content:</strong> {{ comment.content }}</p>
+                                <p><small class="text-muted">On: {{ comment.content_object }} - {{ comment.created_at|date:"d/m/Y H:i" }}</small></p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No recent comments.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Recent Likes -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5>Last 5 Likes</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_likes %}
+                    <ul class="list-group">
+                        {% for like in recent_likes %}
+                            <li class="list-group-item">
+                                <p><strong>On:</strong> {{ like.content_object }}</p>
+                                <p><small class="text-muted">{{ like.created_at|date:"d/m/Y H:i" }}</small></p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No recent likes.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
