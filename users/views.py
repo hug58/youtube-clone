@@ -11,7 +11,6 @@ def home(request):
 
     # Get IDs of videos already shown from the session
     shown_videos = request.session.get('shown_videos', [])
-    print("Currently shown videos:", shown_videos)
 
     # Convert IDs to integers if they are strings
     shown_videos = [int(id) if isinstance(id, str) else id for id in shown_videos]
@@ -26,12 +25,8 @@ def home(request):
     
     # Get IDs of new videos
     new_video_ids = [video.id for video in random_videos]
-    print("New videos to show:", new_video_ids)
-    
     # Update the list of shown videos
     new_shown_videos = shown_videos + new_video_ids
-    print("New list of shown videos:", new_shown_videos)
-    
     # Save to session
     request.session['shown_videos'] = new_shown_videos
     request.session.modified = True  # Ensure the session is saved

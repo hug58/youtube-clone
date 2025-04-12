@@ -14,12 +14,23 @@ def create_video(request):
         if form.is_valid():
             video = form.save(commit=False)
             video.uploader = request.user
-            # Extract video ID from embed URL
+
             embed_url = form.cleaned_data['embed_url']
-            url = embed_url.split('src="')[1].split('"')[0]  
-            video_id = url.split('/embed/')[1].split('?')[0] 
+
+            if "src" in embed_url:
+                url = embed_url.split('src="')[1].split('"')[0]  
+                video_id = url.split('/embed/')[1].split('?')[0] 
+                video.embed_url = url
+
+            else:
+                video_id = embed_url.split('/embed/')[1].split('?')[0] 
+                video.embed_url = embed_url
+
+
             video.provider_video_id = video_id
+            
             video.save()
+            video.calculate_popularity()
             messages.success(request, 'Video uploaded successfully!')
             return redirect('home')
     else:

@@ -7,7 +7,7 @@
         <div class="col-lg-8 mx-auto">
             <div class="card">
                 <div class="ratio ratio-16x9">
-                    {{ video.embed_url|safe }}
+                    <iframe width="560" height="315" src="{{ video.embed_url|safe }}" frameborder="0" allowfullscreen></iframe>
                 </div>
                 <div class="card-body">
                     <h1 class="card-title">{{ video.title }}</h1>

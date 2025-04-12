@@ -61,11 +61,17 @@ class Video(models.Model):
         score -= self.dislikes.count() * 5  # -5 points per dislike
         score += self.comments.count()  # +1 point per comment
 
-        # If the video is from today, add 100 points
-        if self.created_at.date() == timezone.now().date():
-            score += 100
 
-        # Update the popularity field
+        days_difference = (timezone.now().date() - self.created_at.date()).days
+
+        """
+        The videos of today have 100 more popularity points than the videos of yesterday and so on.
+        This means that old videos have a penalty of popularity points for each day, since the new ones
+        will have 100 more points than yesterday.
+        """
+
+        score -= days_difference * 100
+
         self.popularity = score
         self.save(update_fields=['popularity'])
         return score

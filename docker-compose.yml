@@ -1,0 +1,66 @@
+services:
+  backend:
+    build: .
+    restart: always
+    volumes:
+      - ./logs:/app/logs/
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "python manage.py migrate 
+      && gunicorn youtube_clone.wsgi:application --config gunicorn.py"
+    environment:
+      - DOCKER_TIMEZONE=America/Caracas
+      - TOKEN_API_HUGGING=${TOKEN_API_HUGGING}
+      - SECRET_KEY=${SECRET_KEY}
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+      - POSTGRES_PORT=5432
+    depends_on:
+      - db
+    healthcheck:
+      test: curl --fail http://localhost:8000/ || exit 1
+      interval: 5s
+      timeout: 1h
+      retries: 5
+    networks:
+      - fullstack
+
+  db:
+    image: postgres:17.0
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_volume:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fullstack
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - fullstack
+
+networks:
+  fullstack:
+    driver: bridge
+volumes:
+    postgres_volume:
