@@ -8,8 +8,6 @@ A modern YouTube clone built with Django, featuring video upload, playback, user
 - Video upload and streaming
 - Video playback with comments
 - Like and dislike functionality
-- Search functionality
-- Responsive design
 - Docker containerization
 - YouTube API integration for video import
 
@@ -47,7 +45,7 @@ A modern YouTube clone built with Django, featuring video upload, playback, user
 
 3. **Using Docker (Recommended)**
    ```bash
-   docker-compose up --build
+   docker compose up 
    ```
 
 4. **Local Development**
