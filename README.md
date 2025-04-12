@@ -113,11 +113,7 @@ The project includes a management command to import random YouTube videos. To us
 
 ## 👥 Authors
 
-- Your Name - Initial work
+- Hugo Montañez
 
-## 🙏 Acknowledgments
 
-- Django Documentation
-- YouTube API Documentation
-- Docker Documentation
 
