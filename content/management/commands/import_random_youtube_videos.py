@@ -112,7 +112,7 @@ class Command(BaseCommand):
                     video = Video.objects.create(
                         title=snippet['title'],
                         provider_video_id=video_id,
-                        embed_url=f'<iframe width="560" height="315" src="https://www.youtube.com/embed/{video_id}" frameborder="0" allowfullscreen></iframe>',
+                        embed_url=f'https://www.youtube.com/embed/{video_id}',
                         uploader=user
                     )
 
