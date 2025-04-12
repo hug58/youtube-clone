@@ -44,8 +44,6 @@ A modern YouTube clone built with Django, featuring video upload, playback, user
    docker compose up -d     # Run in background
    ```
 
-   
-
 4. **Local Development**
    ```bash
    python -m venv venv
@@ -98,17 +96,13 @@ The project includes a management command to import random YouTube videos. To us
    - `--api-key`: Your YouTube API key (can also be set as YOUTUBE_API_KEY environment variable)
 
    The command will:
-   - Search for random videos using technology-related keywords
    - Import videos with titles and embed URLs
    - Assign the specified user as the uploader
-   - Keep track of imported videos to avoid duplicates
-
-
 
 
 ## 👥 Authors
 
-- Hugo Montañez
+Hugo Montañez
 
 
 
